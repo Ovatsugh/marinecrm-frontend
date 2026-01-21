@@ -1,0 +1,100 @@
+<p-dialog 
+    [(visible)]="visible"
+    (visibleChange)="visibleChange.emit($event)"
+    [header]="isEditing ? 'Editar Produto' : 'Novo Produto'" 
+    [modal]="true" 
+    [style]="{ width: '500px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <form #productForm="ngForm">
+        <div class="flex flex-col gap-5 py-4">
+            <div class="flex flex-col gap-2">
+                <label for="name" class="font-semibold text-sm">Nome *</label>
+                <input 
+                    pInputText 
+                    id="name" 
+                    name="name"
+                    [(ngModel)]="product.name" 
+                    #name="ngModel"
+                    required
+                    placeholder="Digite o nome do produto"
+                    [class.ng-invalid]="name.invalid && name.touched"
+                    [class.ng-dirty]="name.touched"
+                    class="w-full" />
+                <small class="text-red-500" *ngIf="name.invalid && name.touched">
+                    Nome é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="category" class="font-semibold text-sm">Categoria *</label>
+                <input 
+                    pInputText 
+                    id="category" 
+                    name="category"
+                    [(ngModel)]="product.category" 
+                    #category="ngModel"
+                    required
+                    placeholder="Digite a categoria"
+                    [class.ng-invalid]="category.invalid && category.touched"
+                    [class.ng-dirty]="category.touched"
+                    class="w-full" />
+                <small class="text-red-500" *ngIf="category.invalid && category.touched">
+                    Categoria é obrigatória
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="reference_price" class="font-semibold text-sm">Preço de Referência *</label>
+                <p-inputNumber 
+                    [(ngModel)]="product.reference_price" 
+                    name="reference_price"
+                    #referencePrice="ngModel"
+                    required
+                    mode="currency" 
+                    currency="BRL" 
+                    locale="pt-BR"
+                    placeholder="0,00"
+                    inputId="reference_price"
+                    styleClass="w-full"
+                    [inputStyleClass]="'w-full'" />
+                <small class="text-red-500" *ngIf="referencePrice.invalid && referencePrice.touched">
+                    Preço de referência é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="commission_percentage" class="font-semibold text-sm">Comissão (%)</label>
+                <p-inputNumber 
+                    [(ngModel)]="product.commission_percentage" 
+                    name="commission_percentage"
+                    suffix="%"
+                    [min]="0"
+                    [max]="100"
+                    placeholder="0"
+                    inputId="commission_percentage"
+                    styleClass="w-full"
+                    [inputStyleClass]="'w-full'" />
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-2">
+            <button 
+                pButton 
+                label="Cancelar" 
+                icon="pi pi-times" 
+                class="p-button-text" 
+                (click)="closeDialog()"></button>
+            <button 
+                pButton 
+                label="Salvar" 
+                icon="pi pi-check" 
+                [loading]="loading"
+                [disabled]="productForm.invalid || loading"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-dialog>

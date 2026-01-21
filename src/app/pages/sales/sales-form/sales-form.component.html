@@ -1,0 +1,134 @@
+<p-dialog 
+    [(visible)]="visible"
+    (visibleChange)="visibleChange.emit($event)"
+    [header]="isEditing ? 'Editar Venda' : 'Nova Venda'" 
+    [modal]="true" 
+    [style]="{ width: '600px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <form #saleForm="ngForm">
+        <div class="flex flex-col gap-5 py-4">
+            <div class="flex flex-col gap-2">
+                <label for="customer_id" class="font-semibold text-sm">Cliente *</label>
+                <p-select
+                    [(ngModel)]="sale.customer_id"
+                    name="customer_id"
+                    #customerId="ngModel"
+                    required
+                    [options]="customers"
+                    optionLabel="company_name"
+                    optionValue="id"
+                    placeholder="Selecione o cliente"
+                    [filter]="true"
+                    filterPlaceholder="Buscar cliente"
+                    [showClear]="true"
+                    styleClass="w-full"
+                    inputId="customer_id" />
+                <small class="text-red-500" *ngIf="customerId.invalid && customerId.touched">
+                    Cliente é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="product_id" class="font-semibold text-sm">Produto *</label>
+                <p-select
+                    [(ngModel)]="sale.product_id"
+                    name="product_id"
+                    #productId="ngModel"
+                    required
+                    [options]="products"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Selecione o produto"
+                    [filter]="true"
+                    filterPlaceholder="Buscar produto"
+                    [showClear]="true"
+                    styleClass="w-full"
+                    inputId="product_id" />
+                <small class="text-red-500" *ngIf="productId.invalid && productId.touched">
+                    Produto é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="amount" class="font-semibold text-sm">Valor *</label>
+                <p-inputNumber 
+                    [(ngModel)]="sale.amount" 
+                    name="amount"
+                    #amount="ngModel"
+                    required
+                    mode="currency" 
+                    currency="BRL" 
+                    locale="pt-BR"
+                    placeholder="0,00"
+                    inputId="amount"
+                    styleClass="w-full"
+                    [inputStyleClass]="'w-full'" />
+                <small class="text-red-500" *ngIf="amount.invalid && amount.touched">
+                    Valor é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="stage" class="font-semibold text-sm">Estágio *</label>
+                <p-select
+                    [(ngModel)]="sale.stage"
+                    name="stage"
+                    #stage="ngModel"
+                    required
+                    [options]="stageOptions"
+                    placeholder="Selecione o estágio"
+                    styleClass="w-full"
+                    inputId="stage" />
+                <small class="text-red-500" *ngIf="stage.invalid && stage.touched">
+                    Estágio é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="expected_date" class="font-semibold text-sm">Data Esperada</label>
+                <p-datepicker
+                    [(ngModel)]="sale.expected_date"
+                    name="expected_date"
+                    inputId="expected_date"
+                    dateFormat="dd/mm/yy"
+                    placeholder="dd/mm/aaaa"
+                    [showIcon]="true"
+                    appendTo="body"
+                    styleClass="w-full"
+                    [inputStyleClass]="'w-full'" />
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="notes" class="font-semibold text-sm">Observações</label>
+                <textarea 
+                    pInputTextarea 
+                    id="notes" 
+                    name="notes"
+                    [(ngModel)]="sale.notes" 
+                    placeholder="Digite observações sobre a venda"
+                    rows="3"
+                    class="w-full"></textarea>
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-2">
+            <button 
+                pButton 
+                label="Cancelar" 
+                icon="pi pi-times" 
+                class="p-button-text" 
+                (click)="closeDialog()"></button>
+            <button 
+                pButton 
+                label="Salvar" 
+                icon="pi pi-check" 
+                [loading]="loading"
+                [disabled]="saleForm.invalid || loading"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,122 @@
+<p-dialog 
+    [(visible)]="visible"
+    (visibleChange)="visibleChange.emit($event)"
+    [header]="isEditing ? 'Editar Cliente' : 'Novo Cliente'" 
+    [modal]="true" 
+    [style]="{ width: '600px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <form #clientForm="ngForm">
+        <div class="flex flex-col gap-5 py-4">
+            <div class="flex flex-col gap-2">
+                <label for="company_name" class="font-semibold text-sm">Nome da Empresa *</label>
+                <input 
+                    pInputText 
+                    id="company_name" 
+                    name="company_name"
+                    [(ngModel)]="client.company_name" 
+                    #companyName="ngModel"
+                    required
+                    placeholder="Digite o nome da empresa"
+                    [class.ng-invalid]="companyName.invalid && companyName.touched"
+                    [class.ng-dirty]="companyName.touched"
+                    class="w-full" />
+                <small class="text-red-500" *ngIf="companyName.invalid && companyName.touched">
+                    Nome da empresa é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="contact_name" class="font-semibold text-sm">Nome do Contato *</label>
+                <input 
+                    pInputText 
+                    id="contact_name" 
+                    name="contact_name"
+                    [(ngModel)]="client.contact_name" 
+                    #contactName="ngModel"
+                    required
+                    placeholder="Digite o nome do contato"
+                    [class.ng-invalid]="contactName.invalid && contactName.touched"
+                    [class.ng-dirty]="contactName.touched"
+                    class="w-full" />
+                <small class="text-red-500" *ngIf="contactName.invalid && contactName.touched">
+                    Nome do contato é obrigatório
+                </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="phone" class="font-semibold text-sm">Telefone *</label>
+                <input 
+                    pInputText 
+                    id="phone" 
+                    name="phone"
+                    [(ngModel)]="client.phone" 
+                    #phone="ngModel"
+                    required
+                    placeholder="(00) 00000-0000"
+                    [class.ng-invalid]="phone.invalid && phone.touched"
+                    [class.ng-dirty]="phone.touched"
+                    class="w-full" />
+                <small class="text-red-500" *ngIf="phone.invalid && phone.touched">
+                    Telefone é obrigatório
+                </small>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="city" class="font-semibold text-sm">Cidade</label>
+                    <input 
+                        pInputText 
+                        id="city" 
+                        name="city"
+                        [(ngModel)]="client.city" 
+                        placeholder="Digite a cidade"
+                        class="w-full" />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="state" class="font-semibold text-sm">Estado</label>
+                    <input 
+                        pInputText 
+                        id="state" 
+                        name="state"
+                        [(ngModel)]="client.state" 
+                        placeholder="UF"
+                        maxlength="2"
+                        class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="notes" class="font-semibold text-sm">Observações</label>
+                <textarea 
+                    pInputTextarea 
+                    id="notes" 
+                    name="notes"
+                    [(ngModel)]="client.notes" 
+                    placeholder="Digite observações sobre o cliente"
+                    rows="3"
+                    class="w-full"></textarea>
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-2">
+            <button 
+                pButton 
+                label="Cancelar" 
+                icon="pi pi-times" 
+                class="p-button-text" 
+                (click)="closeDialog()"></button>
+            <button 
+                pButton 
+                label="Salvar" 
+                icon="pi pi-check" 
+                [loading]="loading"
+                [disabled]="clientForm.invalid || loading"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-dialog>

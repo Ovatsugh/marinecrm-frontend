@@ -1,0 +1,92 @@
+<p-confirmDialog [style]="{ width: '350px' }" />
+
+<div>
+    <p-table 
+        [value]="dataSource.data.data" 
+        [loading]="loading" 
+        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="p-datatable-sm">
+
+        <ng-template pTemplate="caption">
+            <div class="flex justify-between items-center">
+                <p-iconfield iconPosition="left">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input 
+                        [(ngModel)]="term" 
+                        (input)="search()" 
+                        pInputText 
+                        type="text"
+                        placeholder="Pesquisar clientes..." 
+                        class="h-[45px]" />
+                </p-iconfield>
+
+                <p-button 
+                    icon="pi pi-plus" 
+                    label="Novo Cliente" 
+                    (click)="openNew()" />
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Empresa</th>
+                <th>Contato</th>
+                <th>Telefone</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-client>
+            <tr>
+                <td>{{ client.company_name }}</td>
+                <td>{{ client.contact_name }}</td>
+                <td>{{ client.phone }}</td>
+                <td>{{ client.city }}</td>
+                <td>{{ client.state }}</td>
+                <td>
+                    <button 
+                        pButton 
+                        pRipple 
+                        icon="pi pi-pencil" 
+                        class="p-button-text p-button-sm"
+                        (click)="editClient(client)"></button>
+                    <button 
+                        pButton 
+                        pRipple 
+                        icon="pi pi-trash" 
+                        class="p-button-text p-button-sm p-button-danger"
+                        (click)="confirmDelete(client)"></button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6" class="text-center py-4">Nenhum cliente encontrado</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <div class="flex-auto mt-4">
+        <p-paginator 
+            locale="pt-BR" 
+            (onPageChange)="onPageChange($event)" 
+            [first]="0" 
+            [rows]="filters.per_page"
+            [totalRecords]="dataSource.total" 
+            [rowsPerPageOptions]="[10, 20, 30, 50]" />
+    </div>
+</div>
+
+<app-clients-form
+    [(visible)]="displayDialog"
+    [client]="client"
+    [isEditing]="isEditing"
+    [loading]="loading"
+    (onSave)="saveClient()"
+    (onCancel)="displayDialog = false">
+</app-clients-form>
