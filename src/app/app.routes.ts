@@ -5,11 +5,13 @@ import { ClientsComponent } from './pages/clients/clients.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { SalesComponent } from './pages/sales/sales.component';
 import { KanbanComponent } from './pages/kanban/kanban.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 	{
 		path: '',
 		component: AppLayout,
+		canActivate: [AuthGuard],
 		children: [
 			{ path: '', component: ClientsComponent },
 			{ path: 'produtos', component: ProductsComponent },
